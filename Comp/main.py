@@ -20,7 +20,11 @@ def find_post(id):
             return p
     return {}
 
-
+def find_post_index(id):
+    for p in my_posts:
+        if p['id']==id:
+            return my_posts.index(p)
+    return -1
 @app.get("/")
 def home():
     return {"message": "Hello World"}
@@ -34,7 +38,7 @@ def get_posts():
 
 
 
-@app.post('/createPosts')
+@app.post('/createPosts',status_code=201)
 def create_posts(post: Post):
     post_dict=post.dict()
     post_dict['id']=randrange(0,10**10)
@@ -50,3 +54,28 @@ def get_post(id :int, response: Response):
         #response.status_code=404
         #return {"post_detail":"Doesn't exists"}
         raise HTTPException(status_code=404,detail="Doesn't exists")
+    
+@app.delete('/posts/{id}')
+def delete_post(id:int):
+    post=find_post_index(id)
+    if post!=-1:
+        my_posts.pop(post)
+        return {"Success":"It was deleted"}
+    raise HTTPException(status_code=404, detail="Post not found")
+
+@app.put('/posts/{id}')
+def update_post(id: int, post: Post):
+    index = find_post_index(id)
+
+    if index == -1:
+        raise HTTPException(
+            status_code=404,
+            detail="Post not found"
+        )
+
+    updated_post = post.dict()
+    updated_post['id'] = id
+
+    my_posts[index] = updated_post
+
+    return {"data": updated_post}
