@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from ..database import engine, SessionLocal, get_db
 
 router=APIRouter(
-    prefix='/users'
+    prefix='/users',
+    tags=['Users']
 )
 @router.post("/", status_code=201,response_model=UserOut)
 def create_user(user: UserCreate,db:Session=Depends(get_db)):

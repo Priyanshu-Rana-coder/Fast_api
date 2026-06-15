@@ -8,7 +8,8 @@ from ..database import engine, SessionLocal, get_db
 
 
 router=APIRouter(
-    prefix='/posts'#/id
+    prefix='/posts',
+    tags=['Posts']
 )
 @router.get("/",response_model=List[PostResponse])
 def get_posts(db: Session = Depends(get_db)):
