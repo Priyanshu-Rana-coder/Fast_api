@@ -27,7 +27,7 @@ def create_posts(
 ):
     print(current_user)
 
-    new_post = models.Post(**post.model_dump())
+    new_post = models.Post(owner_id=current_user.id, **post.model_dump())
 
     db.add(new_post)
     db.commit()
