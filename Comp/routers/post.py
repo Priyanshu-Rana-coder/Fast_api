@@ -70,7 +70,11 @@ def delete_post(
             status_code=404,
             detail="Post not found"
         )
-
+    if post.owner_id!=current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized to perform request action"
+        )
     post_query.delete(synchronize_session=False)
     db.commit()
 
@@ -94,7 +98,11 @@ def update_post(
             status_code=404,
             detail="Post not found"
         )
-
+    if existing_post.owner_id!=current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized to perform request action"
+        )
     post_query.update(
         post.model_dump(),
         synchronize_session=False
